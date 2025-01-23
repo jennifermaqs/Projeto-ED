@@ -32,7 +32,7 @@ class SparseMatrix {
     linSentinela = sentinela;
     colSentinela = sentinela;
     
-    //atualiza o nummero de linhas e de colunas
+    //atualiza o número de linhas e de colunas
     linhas = n;
     colunas = m;
     
