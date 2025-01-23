@@ -15,10 +15,10 @@ class SparseMatrix {
     
   public:
   // construtor
-  SparseMatrix(int n, int m){
+  SparseMatrix(int n, int m) {
     
     // verificação
-    if(n<=0 || m<=0){
+    if(n<=0 || m<=0) {
       throw std::invalid_argument("número de linha ou coluna inválidos");
     }
     
