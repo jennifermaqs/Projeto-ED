@@ -3,8 +3,10 @@
 #include "Node.h"
 #include <stdexcept>
 
-//@brief classe implementa uma matriz esparsa com sentinelas circulares
-
+/**
+ * @brief Classe implementa uma matriz esparsa com sentinelas circulares
+ * 
+*/
 class SparseMatrix {
   private:
     Node* sentinela; // sentinela central
@@ -52,11 +54,40 @@ class SparseMatrix {
         colSentinela = colSentinela->direita;
     }
     colSentinela->direita = sentinela;
-  
-  
-  //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-  //KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK calma jao
   }
+
+  //destrutor
+  ~SparseMatrix() {    
+    //desalocando as memórias das linhas
+    Node* linAtual = sentinela->abaixo; // primeira linha
+    while (linAtual != sentinela) {
+      Node* nextLin = linAtual->abaixo;
+
+      Node* nodolinAtual = linAtual->direita;
+      while(nodolinAtual != linAtual) {
+        Node* proximoNo = nodolinAtual->direita;
+        delete nodolinAtual; // deletando nó
+
+        nodolinAtual = proximoNo; // vai pro próximo nó
+      }
+      delete linAtual; // deletando sentinela da linha
+      linAtual = nextLin; // vai pra próxima linha
+    }
+    //desalocando as memórias das colunas
+    Node* colAtual = sentinela->direita; //primeira coluna
+    while(colAtual != sentinela) {
+      Node* nextCol = colAtual->direita;
+      delete colAtual; // deletando sentinela da coluna
+      colAtual = nextCol; // proxima coluna
+    }
+
+    delete sentinela; // liberando nó sentinela principal
+  }
+
+
 };
 
+  //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  //KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK calma jao
+  //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 #endif
