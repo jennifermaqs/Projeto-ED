@@ -26,8 +26,7 @@ int main() {
     
     cout<<endl;
     
-    cout<<"GET(1, 2):";
-    cout<<m.get(1, 2);
+    cout<<"GET(1, 2): " << m.get(1, 2) << endl;
 
     return 0;
 }

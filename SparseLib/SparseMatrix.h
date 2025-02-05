@@ -21,9 +21,9 @@ public:
 	// construtor
 	SparseMatrix(int n, int m) {
 
-		// verificaC'C#o
+		// verificacao
 		if(n<=0 || m<=0) {
-			throw std::invalid_argument("nC:mero de linha ou coluna invC!lidos");
+			throw std::invalid_argument("numero de linha ou coluna invalidos");
 		}
 
 		//inicia o sentinela principal e deixa circular
@@ -62,7 +62,7 @@ public:
 
 	//destrutor
 	~SparseMatrix() {
-		//desalocando as memC3rias das linhas
+		//desalocando as memorias das linhas
 		Node* linAtual = sentinela->abaixo; // primeira linha
 		while (linAtual != sentinela) {
 			Node* nextLin = linAtual->abaixo;
@@ -70,14 +70,14 @@ public:
 			Node* nodolinAtual = linAtual->direita;
 			while(nodolinAtual != linAtual) {
 				Node* proximoNo = nodolinAtual->direita;
-				delete nodolinAtual; // deletando nC3
+				delete nodolinAtual; // deletando no
 
-				nodolinAtual = proximoNo; // vai pro prC3ximo nC3
+				nodolinAtual = proximoNo; // vai pro proximo no
 			}
 			delete linAtual; // deletando sentinela da linha
-			linAtual = nextLin; // vai pra prC3xima linha
+			linAtual = nextLin; // vai pra proxima linha
 		}
-		//desalocando as memC3rias das colunas
+		//desalocando as memorias das colunas
 		Node* colAtual = sentinela->direita; //primeira coluna
 		while(colAtual != sentinela) {
 			Node* nextCol = colAtual->direita;
@@ -85,7 +85,7 @@ public:
 			colAtual = nextCol; // proxima coluna
 		}
 
-		delete sentinela; // liberando nC3 sentinela principal
+		delete sentinela; // liberando no sentinela principal
 	}
 
 	void insert(int i, int j, double valor) {
@@ -98,7 +98,7 @@ public:
 			throw std::invalid_argument("numero de linha ou coluna invalidos"); //não pode acentuar :(
 		}
 
-		//vou achar o sentinela da linha que a gente estC! procurando
+		//vou achar o sentinela da linha que a gente esta procurando
 		Node* auxlinha = sentinela->abaixo;
 
 		while(auxlinha->linha != i) {
@@ -115,12 +115,12 @@ public:
 			lCerto = lCerto->direita;
 		}
 
-		//vamo verificar se essa posiC'C#o jC! existe
+		//vamo verificar se essa posicao ja existe
 		if(auxlinha != lCerto && lCerto->coluna == j) {
 			lCerto->value = valor;
 			return;
 		} else {
-			//caso posiC'C#o nC#o exista
+			//caso posicao nao exista
 
 			Node* noAtual = new Node(i, j, valor, nullptr, nullptr);
 
