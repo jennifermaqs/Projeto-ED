@@ -1,73 +1,109 @@
 #include <iostream>
-
 #include "SparseMatrix.h"
+#include <string>
+#include <sstream>
+#include <fstream>
 using namespace std;
 
-SparseMatrix sum(const SparseMatrix& A, const SparseMatrix& B) {
-    if(A.linhas != B.linhas || A.colunas != B.colunas) {
-        throw std::invalid_argument("Matrizes com dimensões incompatíveis para soma");
-    }
+
+void help(){
     
-    SparseMatrix C(A.linhas, A.colunas); // matriz resultado
-
-    //itera por todas as linhas das matrizes
-    for (int i = 1; i <= A.linhas; i++) {
-        //encontrar linha i em A
-        Node* linhaA = A.sentinela->abaixo;
-        while (linhaA->linha != i) {
-            linhaA = linhaA->abaixo;
-            if(linhaA == A.sentinela) break;
-        }
-        //linha i em B
-        Node* linhaB = B.sentinela->abaixo;
-        while (linhaB->linha != i) {
-            linhaB = linhaB->abaixo;
-            if(linhaB == B.sentinela) break;
-        }
-
-        //ponteiros p percorrer as linhas
-        Node* noA = linhaA->direita;
-        Node* noB = linhaB->direita;
-
-        while(noA != linhaA && noB != linhaB) {
-            if (noA->coluna < noB->coluna) {
-                C.insert(noA->linha, noA->coluna, noA->value);
-                noA = noA->direita;
-            } else if (noB->coluna < noA->coluna) {
-                C.insert(noB->linha, noB->coluna, noB->value);
-                noB = noB->direita;
-            } else {
-                double soma = noA->value + noB->value;
-                if(soma != 0) {
-                    C.insert(noA->linha, noA->coluna, soma);
-                }
-                noA = noA->direita;
-                noB = noB->direita;
-            }
-        }
-        // Elementos restantes de A
-        while (noA != linhaA) {
-         C.insert(noA->linha, noA->coluna, noA->value);
-         noA = noA->direita;
-    }
-        // Elementos restantes de B
-        while (noB != linhaB) {
-         C.insert(noB->linha, noB->coluna, noB->value);
-         noB = noB->direita;
-    }
+    cout<<"|================================================================|"<<endl;
+    cout<<"|---------------------------- HELP ------------------------------|"<<endl;
+    cout<<"|================================================================|"<<endl;
+    cout<<"|___________________________COMANDOS:____________________________|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|1.Exit.........................................close the program|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|2.Create m n........create new matrix whith m rows and n columns|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|3.Show i......................print the matrix i in the terminal|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|4.Showidx...................show all the indexes of rhe matrices|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|5.Sum i j...............................sum the matrices i and j|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|6.Clear i.....................................clear the matrix i|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|7.Read 'mtx.txt'.........read the matrix from the file 'mtx.txt'|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|8.Update m i j......valueupdate the value of the cell(i,j) int m|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|9.Erase all.....erase all the matrices currently int the program|"<<endl;
+    cout<<"|________________________________________________________________|"<<endl;
+    
 }
 
-   return C;
+
+SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
+    
+	if(A->getLinhas() != B->getLinhas()  || A->getColunas()  != B->getColunas()) {
+		throw std::invalid_argument("Matrizes com dimencoes incompativeis para soma");
+	}
+    
+    int n = A->getLinhas();
+    int m = B->getColunas();
+    
+    SparseMatrix* C = new SparseMatrix(n, m);
+	//SparseMatrix C(A.getLinhas(), A.getColunas()); // matriz resultado
+	
+	for(int i=1; i<=A->getLinhas(); i++){
+	    for(int j=1; j<=A->getColunas(); j++){
+	        C->insert(i, j, (A->get(i, j) + B->get(i, j)));
+	    }
+	}
+
+	return C;
 }
+
+
 
 int main() {
-   
-SparseMatrix m(2, 2);
-SparseMatrix mm(2, 2);
-
-m.insert(1, 1, 10);
-mm.insert(1, 1, 20);
-
-sum(m, mm);
     
+    cout<<"|================================================================|"<<endl;
+    cout<<"|---------------------------- Bem vindo! ------------------------|"<<endl;
+    cout<<"|================================================================|"<<endl;
+    cout<<"|Digite:                          |Para:                         |"<<endl;
+    cout<<"|_________________________________|______________________________|"<<endl;
+    cout<<"|-Help                            |Abrir painel de comandos      |"<<endl;
+    cout<<"|-Exit                            |Fechar programa               |"<<endl;
+    cout<<"|_________________________________|______________________________|"<<endl;
+    
+    cout<<endl;
+    
+    string comando;
+    cout<<"Digite a acao:"<<endl;
+    getline(cin, comando);
+    //cin.ignore();
+    cout<<endl;
+    
+    cout<<endl;
+    
+    while(true){
+        //lembrar de limpar o buffer antes de chamar qualquer entrada
+        
+        cout<<"Digite a acao:"<<endl;
+        getline(cin, comando);
+        //cin.ignore();
+        cout<<endl;
+        
+        if(comando == "help" || comando == "Help"){
+            help();
+        }
+        else if(comando == "exit" || comando == "Exit"){
+            cout<<"...FECHANDO PROGRAMA..."<<endl;
+            break;
+        }
+        else if(comando == ""){
+            
+        }
+        else{
+            cout<<"*COMANDO INVALIDO!"<<endl;
+        }
+    }
+    
+
+	return 0;
 }
+
+
