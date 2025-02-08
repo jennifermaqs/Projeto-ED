@@ -17,19 +17,19 @@ void help(){
     cout<<"|                                                                |"<<endl;
     cout<<"|2.Create m n.......cria uma nova matriz com m linhas e n colunas|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|3.Show <i>......................print the matrix i in the terminal|"<<endl;
+    cout<<"|3.Show <i>..............imprime a matriz de indice i no terminal|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|4.Showidx...................show all the indexes of rhe matrices|"<<endl;
+    cout<<"|4.Showidx...........mostra os indices (e dimensoes) das matrizes|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|5.Sum i j...............................sum the matrices i and j|"<<endl;
+    cout<<"|5.Sum i j.....................soma as matrizes de indices i e j |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|6.Clear i.....................................clear the matrix i|"<<endl;
+    cout<<"|6.Clear i............................limpa a matriz de indice i |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|7.Read 'mtx.txt'.........read the matrix from the file 'mtx.txt'|"<<endl;
+    cout<<"|7.Read 'mtx.txt'................le a matriz do arquivo 'mtx.txt'|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|8.Update m i j......valueupdate the value of the cell(i,j) int m|"<<endl;
+    cout<<"|8.Update m i j............atualiza o valor da celula na matriz i|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|9.Erase all.....erase all the matrices currently int the program|"<<endl;
+    cout<<"|9.Erase all.......apaga todas as matrizes atualmente no programa|"<<endl;
     cout<<"|________________________________________________________________|"<<endl;
     
 }
