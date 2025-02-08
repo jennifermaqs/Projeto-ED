@@ -15,21 +15,23 @@ void help(){
     cout<<"|                                                                |"<<endl;
     cout<<"|1.Exit........................................encerra o programa|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|2.Create m n.......cria uma nova matriz com m linhas e n colunas|"<<endl;
+    cout<<"|2.Create...........cria uma nova matriz com m linhas e n colunas|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|3.Show <i>..............imprime a matriz de indice i no terminal|"<<endl;
+    cout<<"|3.Show..................imprime a matriz de indice i no terminal|"<<endl;
     cout<<"|                                                                |"<<endl;
     cout<<"|4.Showidx...........mostra os indices (e dimensoes) das matrizes|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|5.Sum i j.....................soma as matrizes de indices i e j |"<<endl;
+    cout<<"|5.Sum.........................soma as matrizes de indices i e j |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|6.Clear i............................limpa a matriz de indice i |"<<endl;
+    cout<<"|6.Multiply..............multiplica as matrizes de indices i e j |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|7.Read 'mtx.txt'................le a matriz do arquivo 'mtx.txt'|"<<endl;
+    cout<<"|7.Clear..............................limpa a matriz de indice i |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|8.Update m i j............atualiza o valor da celula na matriz i|"<<endl;
+    cout<<"|8.Read..........................le a matriz do arquivo 'mtx.txt'|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|9.Erase all.......apaga todas as matrizes atualmente no programa|"<<endl;
+    cout<<"|9.Update..................atualiza o valor da celula na matriz i|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|10.Erase..........apaga todas as matrizes atualmente no programa|"<<endl;
     cout<<"|________________________________________________________________|"<<endl;
     
 }
