@@ -13,11 +13,11 @@ void help(){
     cout<<"|================================================================|"<<endl;
     cout<<"|___________________________COMANDOS:____________________________|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|1.Exit.........................................close the program|"<<endl;
+    cout<<"|1.Exit........................................encerra o programa|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|2.Create m n........create new matrix whith m rows and n columns|"<<endl;
+    cout<<"|2.Create m n.......cria uma nova matriz com m linhas e n colunas|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|3.Show i......................print the matrix i in the terminal|"<<endl;
+    cout<<"|3.Show <i>......................print the matrix i in the terminal|"<<endl;
     cout<<"|                                                                |"<<endl;
     cout<<"|4.Showidx...................show all the indexes of rhe matrices|"<<endl;
     cout<<"|                                                                |"<<endl;
@@ -34,6 +34,28 @@ void help(){
     
 }
 
+void readSparseMatrix(SparseMatrix& m, const string& nomeDoArquivo) {
+    ifstream arquivo(nomeDoArquivo);
+    if (!arquivo.is_open()) {
+        throw runtime_error("Erro ao abrir o arquivo " + nomeDoArquivo);
+    }
+
+    int numLinhas, numColunas;
+    arquivo >> numLinhas >> numColunas;
+
+    if(numLinhas <= 0 || numColunas <= 0) {
+        throw invalid_argument("Dimensoes da matriz invalidas.");
+    }
+    m.clear();
+
+    m = SparseMatrix(numLinhas, numColunas);
+    int i, j;
+    double valor;
+    while (arquivo >> i >> j >> valor) {
+        m.insert(i, j, valor);
+    }
+    arquivo.close();
+}
 
 SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
     
@@ -56,12 +78,35 @@ SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
 	return C;
 }
 
+SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
+    if(A->getColunas() != B->getLinhas()) {
+        throw std::invalid_argument("Dimensoes das matrizes incompativeis para multiplicacao");
+    }
+
+    int linhasC = A->getLinhas();
+    int colunasC = B->getColunas();
+    SparseMatrix* C = new SparseMatrix(linhasC, colunasC);
+
+    for(int i = 1; i <= linhasC; i++) {
+        for(int j = 1; j <= colunasC; j++) {
+            double soma = 0.0;
+            for(int k = 1; k <= A->getColunas(); k++) {
+                soma += A->get(i,k) * B->get(k,j);
+            }
+            if(soma != 0.0) {
+                C->insert(i, j, soma);
+            }
+        }
+    }
+
+    return C;
+}
 
 
-int main() {
+ int main() {
     
     cout<<"|================================================================|"<<endl;
-    cout<<"|---------------------------- Bem vindo! ------------------------|"<<endl;
+    cout<<"|---------------------------- Bem-vindo(a)! ------------------------|"<<endl;
     cout<<"|================================================================|"<<endl;
     cout<<"|Digite:                          |Para:                         |"<<endl;
     cout<<"|_________________________________|______________________________|"<<endl;
@@ -70,15 +115,7 @@ int main() {
     cout<<"|_________________________________|______________________________|"<<endl;
     
     cout<<endl;
-    
     string comando;
-    cout<<"Digite a acao:"<<endl;
-    getline(cin, comando);
-    //cin.ignore();
-    cout<<endl;
-    
-    cout<<endl;
-    
     while(true){
         //lembrar de limpar o buffer antes de chamar qualquer entrada
         
@@ -105,5 +142,4 @@ int main() {
 
 	return 0;
 }
-
 
