@@ -129,6 +129,9 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
         if(comando == "help" || comando == "Help"){
             help();
         }
+        if(comando.empty()){
+            continue;
+        }
         else if(comando == "exit" || comando == "Exit"){
             cout<<"...FECHANDO PROGRAMA..."<<endl;
             break;
