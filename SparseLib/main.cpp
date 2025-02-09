@@ -93,7 +93,7 @@ SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
 	return C;
 }
 
-//funcao que multiplica duas matrizes esparsas e retorn o resultado
+//funcao que multiplica duas matrizes esparsas e retorna o resultado
 SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     if(A->getColunas() != B->getLinhas()) {
         throw std::invalid_argument("Dimensoes das matrizes incompativeis para multiplicacao");
