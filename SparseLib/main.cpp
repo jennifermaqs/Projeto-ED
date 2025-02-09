@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include<vector>
+#include <vector>
 using namespace std;
 
 
@@ -16,23 +16,21 @@ void help(){
     cout<<"|                                                                |"<<endl;
     cout<<"|1.Exit........................................encerra o programa|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|2.Create...........cria uma nova matriz com m linhas e n colunas|"<<endl;
+    cout<<"|2.Create m n.......cria uma nova matriz com m linhas e n colunas|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|3.Show..................imprime a matriz de indice i no terminal|"<<endl;
+    cout<<"|3.Show <i>....................print the matrix i in the terminal|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|4.Showidx...........mostra os indices (e dimensoes) das matrizes|"<<endl;
+    cout<<"|4.Showidx...................show all the indexes of rhe matrices|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|5.Sum.........................soma as matrizes de indices i e j |"<<endl;
+    cout<<"|5.Sum i j...............................sum the matrices i and j|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|6.Multiply..............multiplica as matrizes de indices i e j |"<<endl;
+    cout<<"|6.Clear i.....................................clear the matrix i|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|7.Clear..............................limpa a matriz de indice i |"<<endl;
+    cout<<"|7.Read 'mtx.txt'.........read the matrix from the file 'mtx.txt'|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|8.Read..........................le a matriz do arquivo 'mtx.txt'|"<<endl;
+    cout<<"|8.Update m i j......valueupdate the value of the cell(i,j) int m|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|9.Update..................atualiza o valor da celula na matriz i|"<<endl;
-    cout<<"|                                                                |"<<endl;
-    cout<<"|10.Erase..........apaga todas as matrizes atualmente no programa|"<<endl;
+    cout<<"|9.Erase all.....erase all the matrices currently int the program|"<<endl;
     cout<<"|________________________________________________________________|"<<endl;
     
 }
@@ -105,6 +103,7 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     return C;
 }
 
+
  int main() {
     
     cout<<"|================================================================|"<<endl;
@@ -117,154 +116,33 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     cout<<"|_________________________________|______________________________|"<<endl;
     
     cout<<endl;
-
-    vector<SparseMatrix*> vetorDeMatrizes;
-    string entrada;
-
+    string comando;
     while(true){
+        //lembrar de limpar o buffer antes de chamar qualquer entrada
         
-        cout<< endl << "\nDigite a acao: ";
-        getline(cin, entrada);
+        cout<<"Digite a acao:"<<endl;
+        getline(cin, comando);
         //cin.ignore();
-        istringstream cc(entrada);
-        string comando;
-        cc>>comando;
+        cout<<endl;
 
-        if(comando == "exit" || comando == "Exit"){
+        istringstream cc(comando);
+        
+        if(comando == "help" || comando == "Help"){
+            help();
+        }
+        else if(comando == "exit" || comando == "Exit"){
             cout<<"...FECHANDO PROGRAMA..."<<endl;
             break;
-        } else if(comando == "help" || comando == "Help"){
-            help();
-        }  if (comando == "create" || comando == "Create") {
-            int i, j;
-            if (cc >> i >> j) {
-                vetorDeMatrizes.push_back(new SparseMatrix(i, j));
-                cout << "Matriz criada com " << i << " linhas e " << j << " colunas." << endl;
-            } else {
-                cout << "COMANDO ESCRITO INCORRETAMENTE" << endl;
-            }
-        } else if(comando == "show" || comando == "Show"){
-            int idc;
-            if(cc >> idc){
-                if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    cout << "Mostrando matriz de indice " << idc << ":" << endl;
-                    vetorDeMatrizes[idc]->print();
-                } else {
-                    cout << "Indice de matriz invalido." << endl;
-                }
-            } else {
-                cout << "COMANDO INVALIDO!" << endl;
-            }
-        } else if (comando == "showidx" || comando == "Showidx") {
-            if (vetorDeMatrizes.empty()) {
-                cout << "Nenhuma matriz indexada." << endl;
-            } else {
-                cout << "Indices das matrizes: " << endl;
-                for (int i = 0; i < vetorDeMatrizes.size(); i++) {
-                    cout << " [" << i << "] ";
-                }
-                cout << endl;
-            }
-        }  else if(comando == "sum" || comando == "Sum"){
-            int i;
-            int j;
-            if(cc >> i >> j){
-                if(i>=0 && i < vetorDeMatrizes.size() && j < vetorDeMatrizes.size() && j>=0){
-                    SparseMatrix* c = sum(vetorDeMatrizes[i], vetorDeMatrizes[j]);
-                        cout<<"Matrizes somadas com sucesso!"<<endl;
-                        cout<<"Voce gostaria de armazenar essa soma de matriz?[s/n] ";
-                        string resposta;
-                        getline(cin, resposta);
-                        if(resposta == "s" || resposta == "S"){
-                            vetorDeMatrizes.push_back(c);
-                            cout<<"Matriz armazenada com sucesso!"<<endl;
-                        } else{
-                            c->clear();
-                            delete c;
-                            cout<<"Matriz descartada"<<endl;
-                        }
-                } else {
-                    cout<<"Valores nao correspondem a matrizes armazenadas"<<endl;
-                }
-            } else{
-                cout<<"Matrizes indicadas invalidas";
-            }
-        } else if(comando == "Multiply" || comando == "multiply"){
-            int i;
-            int j;
-            if(cc >> i >> j){
-                if(i>=0 && i < vetorDeMatrizes.size() && j < vetorDeMatrizes.size() && j>=0){
-                    SparseMatrix* c = multiply(vetorDeMatrizes[i], vetorDeMatrizes[j]);
-                        cout<<"Matrizes multiplicadas com sucesso!"<<endl;
-                        cout<<"Voce gostaria de armazenar esse produto de matrizes?[s/n] ";
-                        string resposta;
-                        getline(cin, resposta);
-                        if(resposta == "s" || resposta == "S"){
-                            vetorDeMatrizes.push_back(c);
-                            //delete c;
-                            cout<<"Matriz armazenada com sucesso!"<<endl;
-                        } else{
-                            delete c;
-                            cout<<"Matriz descartada"<<endl;
-                        }
-                } else {
-                    cout<<"Valores nao correspondem a matrizes armazenadas"<<endl;
-                }
-            } else{
-                cout<<"Matrizes indicadas invalidas";
-            }
-        } else if(comando == "clear" || comando == "Clear"){
-            int idc;
-            if(cc >> idc){
-                if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    vetorDeMatrizes[idc]->clear();
-                    cout << "Matriz " << idc << " limpa." << endl;
-                } else {
-                    cout << "Indice de matriz invalido." << endl;
-                }
-                }
-            }   else if (comando == "read" || comando == "Read") {
-                string arquivo;
-                if (cc >> arquivo) {
-                    SparseMatrix* novaMatriz = new SparseMatrix();
-                    try {
-                    readSparseMatrix(*novaMatriz, arquivo);   // supondo que a função retorna sucesso ou falha
-                        vetorDeMatrizes.push_back(novaMatriz);
-                        cout << "Matriz lida do arquivo " << arquivo 
-                             << " e armazenada no indice " << vetorDeMatrizes.size() - 1 << endl;
-                    } catch (const exception& e) {
-                        cout << "Erro ao ler a matriz do arquivo: " << e.what() << endl;
-                        delete novaMatriz;  // liberar memória manualmente
-                    }
-                } else {
-                    cout << "COMANDO INVALIDO!" << endl;
-                }
-            } else if(comando == "Update" || comando == "update"){
-                int idc, linha, coluna;
-                double valor;
-                if(cc >> idc >> linha >> coluna >> valor){
-                    if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    vetorDeMatrizes[idc]->insert(linha, coluna, valor);
-                    cout << "Matriz " << idc << " atualizada: pos(" 
-                         << linha << "," << coluna << ") = " << valor << endl;
-                } else {
-                    cout << "Indice de matriz invalido." << endl;
-                }
-            }
-         } else if(comando == "erase" || comando == "Erase"){
-            for(int i = (vetorDeMatrizes.size()-1); i>=0; --i){
-                delete vetorDeMatrizes[i];
-                vetorDeMatrizes.pop_back();
-            }
-            cout << "Todas as matrizes foram apagadas." << endl;
-        } else {
-            cout<<"COMANDO INVALIDO!" << endl;
+        }
+        else if(comando == ""){
+            
+        }
+        else{
+            cout<<"*COMANDO INVALIDO!"<<endl;
         }
     }
     
 
 	return 0;
 }
- 
-
 
