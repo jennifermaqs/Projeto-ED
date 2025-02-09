@@ -1,3 +1,10 @@
+/*
+* Jennifer Marques de Brito - 569710
+* João Guilherme Lira dos Santos - 566419
+*/
+
+// estrutura Node que representa um elemento em uma matriz esparsa.
+// armazena um valor e referências para os próximos nós na mesma linha e coluna.
 #ifndef NODE_H
 #define NODE_H
 

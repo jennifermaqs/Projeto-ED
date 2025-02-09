@@ -1,3 +1,8 @@
+/*
+* Jennifer Marques de Brito - 569710
+* João Guilherme Lira dos Santos - 566419
+*/
+
 #include <iostream>
 #include "SparseMatrix.h"
 #include <string>
@@ -7,6 +12,7 @@
 using namespace std;
 
 
+//funcao para exibir um menu de ajuda com os comandos disponiveis no programa
 void help(){
     
     cout<<"|================================================================|"<<endl;
@@ -35,43 +41,51 @@ void help(){
     
 }
 
+//funcao que le uma matriz esparsa a partir de um arquivo
 void readSparseMatrix(SparseMatrix& m, const string& nomeDoArquivo) {
     ifstream arquivo(nomeDoArquivo);
+    // verifica se o arquivo foi aberto com sucesso
     if (!arquivo.is_open()) {
         throw runtime_error("Erro ao abrir o arquivo " + nomeDoArquivo);
     }
 
     int numLinhas, numColunas;
-    arquivo >> numLinhas >> numColunas;
+    arquivo >> numLinhas >> numColunas; // le as dimensoes da matriz
 
+    //validacao das dimensoes da matriz
     if(numLinhas <= 0 || numColunas <= 0) {
         throw invalid_argument("Dimensoes da matriz invalidas.");
     }
-    m.clear();
+    m.clear(); // limpa qualquer dado anterior
 
+    //inicializa a matriz com as dimensoes lidas
     m = SparseMatrix(numLinhas, numColunas);
     int i, j;
     double valor;
+
+    //le os valores nao nulos da matriz
     while (arquivo >> i >> j >> valor) {
-        m.insert(i, j, valor);
+        m.insert(i, j, valor); // insere valor na celula especifica
     }
     arquivo.close();
 }
 
+//funcao que soma duas matrizes esparsas e retorna o resultado
 SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
     
 	if(A->getLinhas() != B->getLinhas()  || A->getColunas()  != B->getColunas()) {
 		throw std::invalid_argument("Matrizes com dimencoes incompativeis para soma");
 	}
     
-    int n = A->getLinhas();
-    int m = B->getColunas();
+    int n = A->getLinhas(); // numero de linhas da matriz resultante
+    int m = B->getColunas();// numero de linhas da matriz resultante
     
     SparseMatrix* C = new SparseMatrix(n, m);
-	//SparseMatrix C(A.getLinhas(), A.getColunas()); // matriz resultado
 	
+    //percorre todas as celulas e realiza a soma elemento por elemento
 	for(int i=1; i<=A->getLinhas(); i++){
 	    for(int j=1; j<=A->getColunas(); j++){
+            //soma e insere no resultado
 	        C->insert(i, j, (A->get(i, j) + B->get(i, j)));
 	    }
 	}
@@ -79,20 +93,22 @@ SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
 	return C;
 }
 
+//funcao que multiplica duas matrizes esparsas e retorn o resultado
 SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     if(A->getColunas() != B->getLinhas()) {
         throw std::invalid_argument("Dimensoes das matrizes incompativeis para multiplicacao");
     }
 
-    int linhasC = A->getLinhas();
-    int colunasC = B->getColunas();
+    int linhasC = A->getLinhas();//numero de linhas da matriz resultante
+    int colunasC = B->getColunas();//numero de linhas da matriz resultante
     SparseMatrix* C = new SparseMatrix(linhasC, colunasC);
 
+    //realiza a multiplicacao tradicional de matrizes
     for(int i = 1; i <= linhasC; i++) {
         for(int j = 1; j <= colunasC; j++) {
-            double soma = 0.0;
+            double soma = 0.0; // acumula o valor 
             for(int k = 1; k <= A->getColunas(); k++) {
-                soma += A->get(i,k) * B->get(k,j);
+                soma += A->get(i,k) * B->get(k,j); // soma dos produtos correspodentes
             }
             if(soma != 0.0) {
                 C->insert(i, j, soma);
@@ -105,6 +121,7 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
 
 
  int main() {
+    //cabecalho inicial do programa
     
     cout<<"|================================================================|"<<endl;
     cout<<"|---------------------------- Bem-vindo(a)! ---------------------|"<<endl;
@@ -115,18 +132,16 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     cout<<"|-Exit                            |Fechar programa               |"<<endl;
     cout<<"|_________________________________|______________________________|"<<endl;
     
-    cout<<endl;
     string comando;
     while(true){
-        //lembrar de limpar o buffer antes de chamar qualquer entrada
-        
+        //acao do usuario        
         cout<<"Digite a acao:"<<endl;
         getline(cin, comando);
-        //cin.ignore();
         cout<<endl;
 
         istringstream cc(comando);
         
+        //verifica os comandos e chama a funcao correspondente
         if(comando == "help" || comando == "Help"){
             help();
         }
@@ -135,7 +150,7 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
             break;
         }
         else if(comando == ""){
-            
+            //nao faz nada caso a entrada seja vazia
         }
         else{
             cout<<"*COMANDO INVALIDO!"<<endl;

@@ -1,3 +1,7 @@
+/*
+* Jennifer Marques de Brito - 569710
+* João Guilherme Lira dos Santos - 566419
+*/
 #ifndef SPARSEMATRIX_H
 #define SPARCEMATRIX_H
 #include "Node.h"
@@ -7,47 +11,47 @@ using namespace std;
 
 class SparseMatrix {
 private:
-	Node* sentinela; // sentinela central
-	Node* linSentinela;
-	Node* colSentinela;
-	int colunas;
-	int linhas;
-
-	//funcao aux para limpar memoria
-	//void clear();
+	Node* sentinela; // sentinela central para gerenciar a estrutura
+	Node* linSentinela; // sentinela das linhas
+	Node* colSentinela; // sentinela das colunas
+	int colunas; // numero de colunas da matriz
+	int linhas; // numero de linhas da matriz
 
 public:
+	//construtor padrao inicializa a matriz vazia com um sentinela central circular
 	SparseMatrix(){
         sentinela = new Node(0, 0, 0, nullptr, nullptr);
 		sentinela->direita = sentinela;
 		sentinela->abaixo = sentinela;
     }
     
-	// construtor
+	// construtor que recebe o numero de linhas e colunas
 	SparseMatrix(int n, int m) {
 
-		// verificaC'C#o
+		// verifica se os parametros sao validos
 		if(n<=0 || m<=0) {
 			throw std::invalid_argument("numero de linha ou coluna invalidos");
 			
 		}
 
-		//inicia o sentinela principal e deixa circular
+		//cria e inicia o sentinela principal e deixa circular
 		sentinela = new Node(0, 0, 0, nullptr, nullptr);
 		sentinela->direita = sentinela;
 		sentinela->abaixo = sentinela;
-		//AQUI JA TA CIRCULAR
+		// aqui ja esta circular
+
 		//atualiza o numero de linhas e de colunas
 		linhas = n;
 		colunas = m;
 		
+		//chama funcao auxiliar para configurar os sentinelas das linhas e colunas
 		auxConstrutor(sentinela, n, m);
-		//AQUI JA TA CIRCULAR
 	}
 	
+	//funcao auxiliar para configurar os sentinelas das linhas e colunas
 	void auxConstrutor(Node* sentinela, int n, int m){
 	    
-		//atualiza o numero de linhas e de colunas
+		//atualiza os atributos
 		linhas = n;
 		colunas = m;
 	    
@@ -60,7 +64,7 @@ public:
 			linSentinela = linSentinela->abaixo;
 			linSentinela->direita = linSentinela;
 		}
-		linSentinela->abaixo = sentinela; //deixei circular
+		linSentinela->abaixo = sentinela; // circular
 
 		//sentinelas das colunas
 		this->colSentinela = new Node(0, 1, 0, nullptr, nullptr);
@@ -74,6 +78,7 @@ public:
 		colSentinela->direita = sentinela;
 	}
 
+	//funcao para liberar a memoria da matriz esparsa
 	void clear() {
 		//desalocando as memorias das linhas
 		Node* linAtual = sentinela->abaixo; // primeira linha
@@ -105,11 +110,13 @@ public:
 		return colunas;
 	}
 
+	//destrutor 
 	~SparseMatrix() {
 		clear();
 		delete sentinela; // liberando no sentinela principal
 	}
 
+	//funcao para inserir um valor na posicao (i, j)
 	void insert(int i, int j, double valor) {
 
 		if(valor==0) {
@@ -120,7 +127,7 @@ public:
 			throw std::invalid_argument("numero de linha ou coluna invalidos"); //nC#o pode acentuar :(
 		}
 
-		//vou achar o sentinela da linha que a gente esta procurando
+		//acha o sentinela da linha esta sendo procurado
 		Node* auxlinha = sentinela->abaixo;
 
 		while(auxlinha->linha != i) {
@@ -128,7 +135,7 @@ public:
 		}
 
 
-		Node *lAnterior = auxlinha; //esse aqui vai achar o anterior
+		Node *lAnterior = auxlinha; //acha o anterior
 		Node *lCerto = lAnterior->direita;//("lCerto de linhaCerta") //esse vai navegar sempre um a frente do auxlinha
 
 		//impede que fique em loop ao comparar com o sentinela(auxlinha) e acha o anterior do procurado
@@ -137,7 +144,7 @@ public:
 			lCerto = lCerto->direita;
 		}
 
-		//vamo verificar se essa posicao ja existe
+		//verificacao da existencia da posicao  
 		if(auxlinha != lCerto && lCerto->coluna == j) {
 			lCerto->value = valor;
 			return;
@@ -146,8 +153,9 @@ public:
 
 			Node* noAtual = new Node(i, j, valor, nullptr, nullptr);
 
-			//inserindo na linha que a gente achou ali e em seguida vamos achar a coluna, igual
-			//fizemos com a linha
+			//inserindo na linha o que foi achado
+			// e em seguida acha-se a coluna, igual
+			//foi feito com a linha
 
 			noAtual->direita = lCerto;
 			lAnterior->direita = noAtual;
@@ -166,13 +174,14 @@ public:
 			}
 
 
-			//agora vamo ajustar os ponteiros
+			//ajustar os ponteiros
 			noAtual->abaixo = cCerto;
 			cAnterior->abaixo = noAtual;
 		}
 
 	}
 
+	// funcao que retorna o valor armazenado na posicao (i, j)
 	double get(int i, int j) const {
 		if(i<=0 || j<=0 || i > linhas || j > colunas) {
 			throw std::invalid_argument("numero de linha ou coluna invalidos");
@@ -187,14 +196,15 @@ public:
 		while(aux->coluna != j) {
 			aux = aux->direita;
 			if(aux->linha == 0) {
-				return 0; //nao sei se essa logica ta certa, mas se a linha for 0 signica que deu a volta
-			}            //e que voltou pro sentinela, logo, o valor nao tava armazenado pois era 0 e n foi armazenado
+				return 0; //se a linha for 0 signica que deu a volta
+			}            //e que voltou pro sentinela, logo, o valor nao tava armazenado pois era 0
 		}
 
 		return aux->value;
 
 	}
 
+	//funcao que imprime a matriz esparsa
 	void print() const {
 
 		if(linhas == 0 || colunas == 0) {
