@@ -66,6 +66,7 @@ void readSparseMatrix(SparseMatrix& m, std::string nomeDoArquivo) {
     }
     arquivo.close();
 }
+
 //funcao que soma duas matrizes esparsas e retorna o resultado
 SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
     
@@ -87,6 +88,7 @@ SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
 
 	return C;
 }
+
 //funcao que multiplica duas matrizes esparsas e retorna o resultado
 SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     if(A->getColunas() != B->getLinhas()) {
@@ -112,6 +114,7 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
 
     return C;
 }
+
 //funcao que salva uma matriz esparsa em um arquivo
 void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArquivo) {
     ofstream arquivo(nomeDoArquivo);
@@ -134,13 +137,6 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
 
     arquivo.close();
     cout << "Matriz salva com sucesso em '" << nomeDoArquivo << "'." << endl;
-
-    // atualiza o log dos testes
-    ofstream log("test_log.txt", ios::app);
-    if (log.is_open()) {
-        log << "Arquivo gerado: " << nomeDoArquivo << endl;
-    }
-    log.close();
 }
 
  int main() {
@@ -163,10 +159,8 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
         //lembrar de limpar o buffer antes de chamar qualquer entrada
         cout<<endl;
         cout<<"Digite a acao: ";
-        getline(cin, entrada);
         cout<<endl;
         //verifica os comandos e chama a funcao correspondente
-
 
         istringstream cc(entrada);
         string comando;
@@ -174,15 +168,12 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
         
         if(comando == "help" || comando == "Help"){
             help();
-        }
-        else if(comando == "exit" || comando == "Exit"){
+        } else if(comando == "exit" || comando == "Exit"){
             cout<<"...FECHANDO PROGRAMA..."<<endl;
             break;
         }
         else if(comando == "create" || comando == "Create"){
-            int i;
-            int j;
-
+            int i,j;
             if(cc >> i >> j){
                 vetorDeMatrizes.push_back(new SparseMatrix(i, j));
                 cout<<"matriz criada com sucesso!";
@@ -190,21 +181,17 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
             } else {
                 cout<<"COMANDO ESCRITO INCORRETAMENTE"<<endl;
             }
-
-        }
-        else if(comando == "showidx" || comando == "Showidx"){
+        } else if(comando == "showidx" || comando == "Showidx"){
             if(vetorDeMatrizes.size() == 0){
                 cout<<"Nenhuma matrix indexada"<<endl;
-            } else{
+            } else {
                 cout<<"Indices das matrizes:" <<endl;
                 for(int i=0; i<vetorDeMatrizes.size(); i++){
                     cout<<" ["<<i<<"] ";
                 }
                 cout<<endl;
-            }
-            
-        }
-        else if(comando == "clear" || comando == "Clear"){
+            } 
+        } else if(comando == "clear" || comando == "Clear"){
         int idc;
         if(cc >> idc){
             if(idc >= 0 && idc < vetorDeMatrizes.size()){
@@ -213,11 +200,9 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
             } else {
                 cout << "Indice de matriz invalido." << endl;
             }
-            }
         }
-        else if(comando == "sum" || comando == "Sum"){
-            int i;
-            int j;
+    } else if(comando == "sum" || comando == "Sum"){
+            int i, j;
             if(cc >> i >> j){
                 if(i>=0 && i < vetorDeMatrizes.size() && j < vetorDeMatrizes.size() && j>=0){
                     SparseMatrix* c = sum(vetorDeMatrizes[i], vetorDeMatrizes[j]);
@@ -240,8 +225,7 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
                 cout<<"Matrizes indicadas invalidas";
             }
         } else if(comando == "Multiply" || comando == "multiply"){
-            int i;
-            int j;
+            int i,j;
             if(cc >> i >> j){
                 if(i>=0 && i < vetorDeMatrizes.size() && j < vetorDeMatrizes.size() && j>=0){
                     SparseMatrix* c = multiply(vetorDeMatrizes[i], vetorDeMatrizes[j]);
@@ -263,8 +247,7 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
             } else{
                 cout<<"Matrizes indicadas invalidas";
             }
-        }
-        else if(comando == "Update" || comando == "update"){
+        } else if(comando == "Update" || comando == "update"){
             int idc, linha, coluna;
             double valor;
             if(cc >> idc >> linha >> coluna >> valor){
@@ -276,15 +259,13 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
                 cout << "Indice de matriz invalido." << endl;
             }
         }
-        }
-        else if(comando == "erase" || comando == "Erase"){
+    } else if(comando == "erase" || comando == "Erase"){
             for(int i = (vetorDeMatrizes.size()-1); i>=0; i--){
                 delete vetorDeMatrizes[i];
                 vetorDeMatrizes.pop_back();
                 cout<<"Matrizes apagadas com sucesso";
             }
-        }
-        else if (comando == "read" || comando == "Read") {
+        } else if (comando == "read" || comando == "Read") {
             string nomeDoArquivo;
         
             SparseMatrix novaMatriz;
@@ -300,8 +281,8 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
                 cout << "Erro: Argumento inválido - " << e.what() << endl;
             } catch (const runtime_error& e) {
                 cout << "Erro: " << e.what() << endl;
-            }
-        } else if (comando.rfind("Save", 0) == 0) { // comando: "Save <index> <nomeDoArquivo>"
+        }
+    } else if (comando.rfind("Save", 0) == 0) { // comando: "Save <index> <nomeDoArquivo>"
             int index;
             string nomeDoArquivo;
             cc >> index >> nomeDoArquivo;
@@ -310,8 +291,8 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
                 salvarMatrizEmArquivo(*vetorDeMatrizes[index], nomeDoArquivo);
             } else {
                 cout << "Indice da matriz invalido." << endl;
-            }
-        } else if(comando == "show" || comando == "Show"){
+        }
+    } else if(comando == "show" || comando == "Show"){
             int idc;
             if(cc >> idc){
                 if(idc >= 0 && idc < vetorDeMatrizes.size()){
@@ -322,9 +303,9 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
                 }
             } else {
                 cout << "COMANDO INVALIDO!" << endl;
-            }
         }
     }
+}
     
     for (SparseMatrix* matriz : vetorDeMatrizes) {
         delete matriz;

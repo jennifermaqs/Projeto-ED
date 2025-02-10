@@ -15,4 +15,7 @@
 | TC010  | Comando de Ajuda               | `help`                                              | Exibição de um painel de ajuda com a listagem de comandos e suas funções                 | Painel de ajuda exibido             | Sucesso    |
 | TC011  | Encerramento do Programa       | `exit`                                              | Programa finalizado sem erros                                                          | Programa encerrado                  | Sucesso    |
 
-
+## Algumas imagens de saídas dos testes:
+![TC001](image.png)
+![TC002](image-1.png)
+![TC003](image-2.png)
