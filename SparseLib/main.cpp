@@ -1,18 +1,14 @@
-/*
-* Jennifer Marques de Brito - 569710
-* João Guilherme Lira dos Santos - 566419
-*/
 #include <iostream>
 #include "SparseMatrix.h"
 #include <string>
 #include <sstream>
 #include <fstream>
-#include<vector>
+#include <vector>
 using namespace std;
 
-//funcao para exibir um menu de ajuda com os comandos disponiveis no programa
+
 void help(){
-    
+//funcao para exibir um menu de ajuda com os comandos disponiveis no programa    
     cout<<"|================================================================|"<<endl;
     cout<<"|---------------------------- HELP ------------------------------|"<<endl;
     cout<<"|================================================================|"<<endl;
@@ -20,48 +16,49 @@ void help(){
     cout<<"|                                                                |"<<endl;
     cout<<"|1.Exit........................................encerra o programa|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|2.Create...........cria uma nova matriz com m linhas e n colunas|"<<endl;
+    cout<<"|2.Create m n ......cria uma nova matriz com m linhas e n colunas|"<<endl;
     cout<<"|                                                                |"<<endl;
     cout<<"|3.Show..................imprime a matriz de indice i no terminal|"<<endl;
     cout<<"|                                                                |"<<endl;
     cout<<"|4.Showidx...........mostra os indices (e dimensoes) das matrizes|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|5.Sum.........................soma as matrizes de indices i e j |"<<endl;
+    cout<<"|5.Sum i j.....................soma as matrizes de indices i e j |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|6.Multiply..............multiplica as matrizes de indices i e j |"<<endl;
+    cout<<"|6.Multiply i j..........multiplica as matrizes de indices i e j |"<<endl;
     cout<<"|                                                                |"<<endl;
     cout<<"|7.Clear..............................limpa a matriz de indice i |"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|8.Read..........................le a matriz do arquivo 'mtx.txt'|"<<endl;
+    cout<<"|8.Read 'm.txt'..................le a matriz do arquivo 'mtx.txt'|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|9.Update..................atualiza o valor da celula na matriz i|"<<endl;
+    cout<<"|9.Update m i j valor......atualiza o valor da celula na matriz i|"<<endl;
     cout<<"|                                                                |"<<endl;
-    cout<<"|10.Erase..........apaga todas as matrizes atualmente no programa|"<<endl;
+    cout<<"|10.Save <i> 'mtx.txt'......salva a matriz i no arquivo 'mtx.txt'|"<<endl;
+    cout<<"|                                                                |"<<endl;
+    cout<<"|11.Erase..........apaga todas as matrizes atualmente no programa|"<<endl;
     cout<<"|________________________________________________________________|"<<endl;
     
 }
-
 //funcao que le uma matriz esparsa a partir de um arquivo
-void readSparseMatrix(SparseMatrix& m, const string& nomeDoArquivo) {
+void readSparseMatrix(SparseMatrix& m, std::string nomeDoArquivo) {
     ifstream arquivo(nomeDoArquivo);
-        // verifica se o arquivo foi aberto com sucesso
+    // verifica se o arquivo foi aberto com sucesso
     if (!arquivo.is_open()) {
         throw runtime_error("Erro ao abrir o arquivo " + nomeDoArquivo);
     }
 
-    int numLinhas, numColunas; 
+    int numLinhas, numColunas;
+    double valor;
     arquivo >> numLinhas >> numColunas; // le as dimensoes da matriz
 
     //validacao das dimensoes da matriz
-    if(numLinhas <= 0 || numColunas <= 0) {
-        throw invalid_argument("Dimensoes da matriz invalidas.");
+    if(numLinhas != 0||numColunas != 0){
+        SparseMatrix aux(numLinhas, numColunas);
+        m = aux;
     }
-    m.clear();  // limpa qualquer dado anterior
 
     //inicializa a matriz com as dimensoes lidas
     m = SparseMatrix(numLinhas, numColunas);
     int i, j;
-    double valor;
 
     //le os valores nao nulos da matriz
     while (arquivo >> i >> j >> valor) {
@@ -80,8 +77,7 @@ SparseMatrix* sum(const SparseMatrix* A, const SparseMatrix* B) {
     int m = B->getColunas(); // numero de colunas da matriz resultante
     
     SparseMatrix* C = new SparseMatrix(n, m);
-	
-    //percorre todas as celulas e realiza a soma elemento por elemento
+	//percorre todas as celulas e realiza a soma elemento por elemento
 	for(int i=1; i<=A->getLinhas(); i++){
 	    for(int j=1; j<=A->getColunas(); j++){
             //soma e insere no resultado
@@ -106,7 +102,7 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
         for(int j = 1; j <= colunasC; j++) {
             double soma = 0.0; // acumula o valor
             for(int k = 1; k <= A->getColunas(); k++) {
-                soma += A->get(i,k) * B->get(k,j);  // soma dos produtos correspodentes
+                soma += A->get(i,k) * B->get(k,j); // soma dos produtos correspodentes
             }
             if(soma != 0.0) {
                 C->insert(i, j, soma);
@@ -116,9 +112,39 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
 
     return C;
 }
+//funcao que salva uma matriz esparsa em um arquivo
+void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArquivo) {
+    ofstream arquivo(nomeDoArquivo);
+    if (!arquivo.is_open()) {
+        throw runtime_error("Erro ao abrir o arquivo " + nomeDoArquivo);
+    }
+
+    int linhas = matriz.getLinhas();
+    int colunas = matriz.getColunas();
+    arquivo << linhas << " " << colunas << endl;
+
+    for (int i = 1; i <= linhas; i++) {
+        for (int j = 1; j <= colunas; j++) {
+            double valor = matriz.get(i, j);
+            if (valor != 0) {
+                arquivo << i << " " << j << " " << valor << endl;
+            }
+        }
+    }
+
+    arquivo.close();
+    cout << "Matriz salva com sucesso em '" << nomeDoArquivo << "'." << endl;
+
+    // atualiza o log dos testes
+    ofstream log("test_log.txt", ios::app);
+    if (log.is_open()) {
+        log << "Arquivo gerado: " << nomeDoArquivo << endl;
+    }
+    log.close();
+}
 
  int main() {
-    //cabecalho inicial do programa
+    
     cout<<"|================================================================|"<<endl;
     cout<<"|---------------------------- Bem-vindo(a)! ---------------------|"<<endl;
     cout<<"|================================================================|"<<endl;
@@ -128,57 +154,68 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
     cout<<"|-Exit                            |Fechar programa               |"<<endl;
     cout<<"|_________________________________|______________________________|"<<endl;
     
-    cout<<endl;
-
     vector<SparseMatrix*> vetorDeMatrizes;
-    string entrada;
+    int in=0;
 
+    cout<<endl;
+    string entrada;
     while(true){
-        //acao do usuario       
-        cout<< endl << "\nDigite a acao: ";
+        //lembrar de limpar o buffer antes de chamar qualquer entrada
+        cout<<endl;
+        cout<<"Digite a acao: ";
         getline(cin, entrada);
-        istringstream cc(entrada);
-        string comando;
-        cc>>comando;
+        cout<<endl;
         //verifica os comandos e chama a funcao correspondente
 
 
-        if(comando == "exit" || comando == "Exit"){
+        istringstream cc(entrada);
+        string comando;
+        cc>>comando;
+        
+        if(comando == "help" || comando == "Help"){
+            help();
+        }
+        else if(comando == "exit" || comando == "Exit"){
             cout<<"...FECHANDO PROGRAMA..."<<endl;
             break;
-        } else if(comando == "help" || comando == "Help"){
-            help();
-        }  if (comando == "create" || comando == "Create") {
-            int i, j;
-            if (cc >> i >> j) {
+        }
+        else if(comando == "create" || comando == "Create"){
+            int i;
+            int j;
+
+            if(cc >> i >> j){
                 vetorDeMatrizes.push_back(new SparseMatrix(i, j));
-                cout << "Matriz criada com " << i << " linhas e " << j << " colunas." << endl;
+                cout<<"matriz criada com sucesso!";
+                i++;
             } else {
-                cout << "COMANDO ESCRITO INCORRETAMENTE" << endl;
+                cout<<"COMANDO ESCRITO INCORRETAMENTE"<<endl;
             }
-        } else if(comando == "show" || comando == "Show"){
-            int idc;
-            if(cc >> idc){
-                if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    cout << "Mostrando matriz de indice " << idc << ":" << endl;
-                    vetorDeMatrizes[idc]->print();
-                } else {
-                    cout << "Indice de matriz invalido." << endl;
+
+        }
+        else if(comando == "showidx" || comando == "Showidx"){
+            if(vetorDeMatrizes.size() == 0){
+                cout<<"Nenhuma matrix indexada"<<endl;
+            } else{
+                cout<<"Indices das matrizes:" <<endl;
+                for(int i=0; i<vetorDeMatrizes.size(); i++){
+                    cout<<" ["<<i<<"] ";
                 }
-            } else {
-                cout << "COMANDO INVALIDO!" << endl;
+                cout<<endl;
             }
-        } else if (comando == "showidx" || comando == "Showidx") {
-            if (vetorDeMatrizes.empty()) {
-                cout << "Nenhuma matriz indexada." << endl;
+            
+        }
+        else if(comando == "clear" || comando == "Clear"){
+        int idc;
+        if(cc >> idc){
+            if(idc >= 0 && idc < vetorDeMatrizes.size()){
+                vetorDeMatrizes[idc]->clear();
+                cout << "Matriz " << idc << " limpa." << endl;
             } else {
-                cout << "Indices das matrizes: " << endl;
-                for (int i = 0; i < vetorDeMatrizes.size(); i++) {
-                    cout << " [" << i << "] ";
-                }
-                cout << endl;
+                cout << "Indice de matriz invalido." << endl;
             }
-        }  else if(comando == "sum" || comando == "Sum"){
+            }
+        }
+        else if(comando == "sum" || comando == "Sum"){
             int i;
             int j;
             if(cc >> i >> j){
@@ -226,60 +263,73 @@ SparseMatrix* multiply(const SparseMatrix* A, const SparseMatrix* B) {
             } else{
                 cout<<"Matrizes indicadas invalidas";
             }
-        } else if(comando == "clear" || comando == "Clear"){
+        }
+        else if(comando == "Update" || comando == "update"){
+            int idc, linha, coluna;
+            double valor;
+            if(cc >> idc >> linha >> coluna >> valor){
+                if(idc >= 0 && idc < vetorDeMatrizes.size()){
+                vetorDeMatrizes[idc]->insert(linha, coluna, valor);
+                cout << "Matriz " << idc << " atualizada: pos(" 
+                     << linha << "," << coluna << ") = " << valor << endl;
+            } else {
+                cout << "Indice de matriz invalido." << endl;
+            }
+        }
+        }
+        else if(comando == "erase" || comando == "Erase"){
+            for(int i = (vetorDeMatrizes.size()-1); i>=0; i--){
+                delete vetorDeMatrizes[i];
+                vetorDeMatrizes.pop_back();
+                cout<<"Matrizes apagadas com sucesso";
+            }
+        }
+        else if (comando == "read" || comando == "Read") {
+            string nomeDoArquivo;
+        
+            SparseMatrix novaMatriz;
+            try {
+                readSparseMatrix(novaMatriz, nomeDoArquivo);
+                
+                // Adiciona a nova matriz ao vetor
+                vetorDeMatrizes.push_back(new SparseMatrix(novaMatriz));
+                cout << "Matriz lida do arquivo " << nomeDoArquivo 
+                     << " e armazenada no índice " << vetorDeMatrizes.size() - 1 << endl;
+        
+            } catch (const invalid_argument& e) {
+                cout << "Erro: Argumento inválido - " << e.what() << endl;
+            } catch (const runtime_error& e) {
+                cout << "Erro: " << e.what() << endl;
+            }
+        } else if (comando.rfind("Save", 0) == 0) { // comando: "Save <index> <nomeDoArquivo>"
+            int index;
+            string nomeDoArquivo;
+            cc >> index >> nomeDoArquivo;
+
+            if (index >= 0 && index < vetorDeMatrizes.size()) {
+                salvarMatrizEmArquivo(*vetorDeMatrizes[index], nomeDoArquivo);
+            } else {
+                cout << "Indice da matriz invalido." << endl;
+            }
+        } else if(comando == "show" || comando == "Show"){
             int idc;
             if(cc >> idc){
                 if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    vetorDeMatrizes[idc]->clear();
-                    cout << "Matriz " << idc << " limpa." << endl;
+                    cout << "Mostrando matriz de indice " << idc << ":" << endl;
+                    vetorDeMatrizes[idc]->print();
                 } else {
                     cout << "Indice de matriz invalido." << endl;
                 }
-                }
-            }   else if (comando == "read" || comando == "Read") {
-                string arquivo;
-                if (cc >> arquivo) {
-                    SparseMatrix* novaMatriz = new SparseMatrix();
-                    try {
-                    readSparseMatrix(*novaMatriz, arquivo);   // supondo que a função retorna sucesso ou falha
-                        vetorDeMatrizes.push_back(novaMatriz);
-                        cout << "Matriz lida do arquivo " << arquivo 
-                             << " e armazenada no indice " << vetorDeMatrizes.size() - 1 << endl;
-                    } catch (const exception& e) {
-                        cout << "Erro ao ler a matriz do arquivo: " << e.what() << endl;
-                        delete novaMatriz;  // liberar memória manualmente
-                    }
-                } else {
-                    cout << "COMANDO INVALIDO!" << endl;
-                }
-            } else if(comando == "Update" || comando == "update"){
-                int idc, linha, coluna;
-                double valor;
-                if(cc >> idc >> linha >> coluna >> valor){
-                    if(idc >= 0 && idc < vetorDeMatrizes.size()){
-                    vetorDeMatrizes[idc]->insert(linha, coluna, valor);
-                    cout << "Matriz " << idc << " atualizada: pos(" 
-                         << linha << "," << coluna << ") = " << valor << endl;
-                } else {
-                    cout << "Indice de matriz invalido." << endl;
-                }
+            } else {
+                cout << "COMANDO INVALIDO!" << endl;
             }
-         } else if(comando == "erase" || comando == "Erase"){
-            for(int i = (vetorDeMatrizes.size()-1); i>=0; --i){
-                delete vetorDeMatrizes[i];
-                vetorDeMatrizes.pop_back();
-            }
-            cout << "Todas as matrizes foram apagadas." << endl;
-        } else {
-            cout<<"COMANDO INVALIDO!" << endl;
         }
     }
     
-
+    for (SparseMatrix* matriz : vetorDeMatrizes) {
+        delete matriz;
+    }
+    
 	return 0;
 }
- 
-
-
-
 
