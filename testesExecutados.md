@@ -1,9 +1,5 @@
 # Relatório de Testes - Projeto Matrizes Esparsas
 
-## Introdução
-Este documento apresenta os testes realizados para verificar a implementação da estrutura de dados para matrizes esparsas, utilizando listas encadeadas simples com sentinelas – conforme o projeto proposto por Nivio Ziviani. Os testes validam as operações fundamentais, como criação, inserção, recuperação, impressão, soma, multiplicação, leitura de arquivo, atualização, limpeza e gerenciamento de memória, assegurando a eficiência e robustez da aplicação.
-
-## Testes Realizados
 
 | **ID** | **Funcionalidade**             | **Entrada/Comando**                                 | **Resultado Esperado**                                                                 | **Resultado Obtido**                | **Status** |
 |--------|--------------------------------|-----------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------|------------|
@@ -19,14 +15,4 @@ Este documento apresenta os testes realizados para verificar a implementação d
 | TC010  | Comando de Ajuda               | `help`                                              | Exibição de um painel de ajuda com a listagem de comandos e suas funções                 | Painel de ajuda exibido             | Sucesso    |
 | TC011  | Encerramento do Programa       | `exit`                                              | Programa finalizado sem erros                                                          | Programa encerrado                  | Sucesso    |
 
-\* *Observação:* No TC007, se ocorrer algum problema na leitura do arquivo (por exemplo, arquivo não encontrado ou formato inválido), o teste deve indicar o erro e demonstrar que o sistema está tratando essa situação adequadamente.
 
-## Conclusão dos Testes
-Os testes realizados comprovaram que a implementação da matriz esparsa atende aos requisitos propostos. Foram validadas as operações de inserção, recuperação e atualização de elementos, bem como as operações matemáticas de soma e multiplicação. Além disso, os testes de leitura de arquivo, limpeza e gerenciamento de memória demonstraram que as funções auxiliares (como `readSparseMatrix` e `clear`) estão funcionando conforme esperado, apesar dos desafios encontrados durante a implementação.
-
-## Considerações Finais
-A abordagem com listas encadeadas e sentinelas possibilitou uma manipulação eficiente da matriz esparsa, otimizando o uso de memória e o desempenho das operações. As dificuldades enfrentadas – especialmente na leitura de dados externos e na alocação/desalocação dinâmica de memória – foram superadas com a implementação de funções específicas para tratamento de erros e liberação de recursos. O trabalho colaborativo e a divisão equilibrada de tarefas foram fundamentais para o sucesso do projeto.
-
----
-
-*Dica:* Você pode incluir capturas de tela ou trechos do terminal mostrando os resultados dos testes para enriquecer o relatório e facilitar a compreensão do avaliador.
