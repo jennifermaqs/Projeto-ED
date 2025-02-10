@@ -159,6 +159,7 @@ void salvarMatrizEmArquivo(const SparseMatrix& matriz, const string& nomeDoArqui
         //lembrar de limpar o buffer antes de chamar qualquer entrada
         cout<<endl;
         cout<<"Digite a acao: ";
+        getline(cin, entrada);
         cout<<endl;
         //verifica os comandos e chama a funcao correspondente
 
